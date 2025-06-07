@@ -1,0 +1,52 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyManager : MonoBehaviour
+{
+    public List<GameObject> enemyPrefabs; // Префабы врагов с реализацией IEnemyBehaviour
+    private List<IEnemyBehaviour> behaviours = new List<IEnemyBehaviour>();
+    private int currentIndex = 0;
+    private IEnemyBehaviour currentEnemy = null;
+
+    private void Start()
+    {
+        foreach (var prefab in enemyPrefabs)
+        {
+            var instance = Instantiate(prefab, transform);
+            instance.SetActive(false);
+            var behaviour = instance.GetComponent<IEnemyBehaviour>();
+            behaviours.Add(behaviour);
+        }
+
+        if (behaviours.Count > 0)
+            ActivateEnemy(0);
+    }
+
+    public void NextEnemy()
+    {
+        int nextIndex = (currentIndex + 1) % behaviours.Count;
+        ActivateEnemy(nextIndex);
+    }
+
+    private void ActivateEnemy(int index)
+    {
+        if (currentEnemy != null)
+            currentEnemy.OnDespawn();
+
+        currentIndex = index;
+        currentEnemy = behaviours[currentIndex];
+        currentEnemy.OnSpawn();
+    }
+
+    public void PlayerAttacked()
+    {
+        if (currentEnemy != null)
+            currentEnemy.OnPlayerAttack();
+    }
+
+    public void PlayerIdle()
+    {
+        if (currentEnemy != null)
+            currentEnemy.OnIdle();
+    }
+}

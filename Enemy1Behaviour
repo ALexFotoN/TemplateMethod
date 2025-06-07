@@ -1,0 +1,33 @@
+public class Enemy1Behaviour : MonoBehaviour, IEnemyBehaviour
+{
+    private Animator animator;
+    private bool hasAttacked = false;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    public void OnSpawn()
+    {
+        gameObject.SetActive(true);
+        if (!hasAttacked)
+        {
+            animator.SetTrigger("Attack");
+            hasAttacked = true;
+        }
+        else
+        {
+            animator.SetTrigger("Idle");
+        }
+    }
+
+    public void OnDespawn()
+    {
+        gameObject.SetActive(false);
+        hasAttacked = false;
+    }
+
+    public void OnPlayerAttack() { }
+    public void OnIdle()  { }
+}

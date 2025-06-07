@@ -1,0 +1,7 @@
+public interface IEnemyBehaviour
+{
+    void OnSpawn();
+    void OnDespawn();
+    void OnPlayerAttack();
+    void OnIdle();
+}

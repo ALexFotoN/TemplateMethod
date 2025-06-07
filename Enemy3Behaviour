@@ -1,0 +1,30 @@
+public class Enemy3Behaviour : MonoBehaviour, IEnemyBehaviour
+{
+    private Animator animator;
+
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    public void OnSpawn()
+    {
+        gameObject.SetActive(true);
+        animator.SetTrigger("Idle");
+    }
+
+    public void OnDespawn()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void OnPlayerAttack()
+    {
+        animator.SetTrigger("Attack");
+    }
+
+    public void OnIdle()
+    {
+        animator.SetTrigger("Idle");
+    }
+}

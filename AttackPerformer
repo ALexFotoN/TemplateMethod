@@ -1,0 +1,46 @@
+public class AttackPerformer : MonoBehaviour
+{
+    public Player player;
+    public EnemyManager enemyManager;
+    private int attackIndex = 0;
+    private List<IAttackStrategy> strategies = new List<IAttackStrategy>();
+
+    private void Start()
+    {
+        strategies.Add(new SwordAttack());
+        strategies.Add(new BowAttack());
+        strategies.Add(new MagicAttack());
+
+        player.SetStrategy(strategies[attackIndex]);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            SwitchAttack(0);
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            SwitchAttack(1);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            SwitchAttack(2);
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            player.PerformAttack();
+            enemyManager.PlayerAttacked();
+        }
+        if (Input.GetKeyUp(KeyCode.Q))
+        {
+            enemyManager.PlayerIdle();
+        }
+    }
+
+    private void SwitchAttack(int index)
+    {
+        attackIndex = index;
+        player.SetStrategy(strategies[attackIndex]);
+        enemyManager.NextEnemy();
+        // здесь также фон кнопок можно переключить
+    }
+}
